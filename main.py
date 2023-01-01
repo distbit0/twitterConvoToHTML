@@ -13,11 +13,13 @@ headHtml = """
       .indent {
         padding-left: 20px;
         margin-left: 20px;
+        margin-bottom: 6px;
         border: 1px solid white;
+        border-radius: 5px;
 
       }
     li {
-      margin: 0;
+      margin: 5px;
       padding: 5px;
     }
   </style>
@@ -101,7 +103,7 @@ def markdown_to_html(markdown_list):
 
         # Get the number of leading spaces on the line
         leading_spaces = len(line) - len(line.lstrip())
-
+        print(leading_spaces)
         # Calculate the new indent level
         new_indent_level = leading_spaces // 4
 
@@ -111,7 +113,7 @@ def markdown_to_html(markdown_list):
 
         # If the new indent level is less than the current indent level, close the current div
         elif new_indent_level < indent_level:
-            html_output += "</div>"
+            html_output += "</div>" * abs((new_indent_level - indent_level))
 
         # Update the current indent level
         indent_level = new_indent_level
@@ -126,16 +128,17 @@ def markdown_to_html(markdown_list):
 
 
 if __name__ == "__main__":
-    tweet_id = get_first_arg()
-    replies = get_replies(tweet_id)
-    with open("output.json", "w") as outputMdFile:
-        outputMdFile.write(json.dumps(replies, indent=4))
+    # tweet_id = get_first_arg()
+    # replies = get_replies(tweet_id)
+    # with open("output.json", "w") as outputMdFile:
+    #     outputMdFile.write(json.dumps(replies, indent=4))
 
-    outputMd = json_to_md(replies, tweet_id)
+    # outputMd = json_to_md(replies, tweet_id)
 
-    with open("output.md", "w") as outputMdFile:
-        outputMdFile.write(outputMd)
+    # with open("output.md", "w") as outputMdFile:
+    #     outputMdFile.write(outputMd)
 
+    outputMd = open("output.md").read()
     html = markdown_to_html(outputMd)
 
     with open("output.html", "w") as outputHtmlFile:
