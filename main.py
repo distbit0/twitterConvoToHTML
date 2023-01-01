@@ -103,7 +103,7 @@ def markdown_to_html(markdown_list):
         leading_spaces = len(line) - len(line.lstrip())
 
         # Calculate the new indent level
-        new_indent_level = leading_spaces // 2
+        new_indent_level = leading_spaces // 4
 
         # If the new indent level is greater than the current indent level, add a new div
         if new_indent_level > indent_level:
