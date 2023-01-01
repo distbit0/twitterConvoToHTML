@@ -1,0 +1,200 @@
+{
+    "1607860604223750153": {
+        "text": "[BenFerrum] : @hildobby_ What do you want to find out?",
+        "children": []
+    },
+    "1607763591314259976": {
+        "text": "[hildobby_] : @BenFerrum ofc I do but those often don't paint the full picture",
+        "children": [
+            1607860604223750153
+        ]
+    },
+    "1607828100905140226": {
+        "text": "[chanhosuh] : @hildobby_ @_bout3fiddy_ More thought into (better) view functions would go a long way.  Too many smart contract devs don't give this a second thought.  That's the real problem IMO.",
+        "children": []
+    },
+    "1607762744975163392": {
+        "text": "[hildobby_] : @_bout3fiddy_ Events is a solution but not always necessary, you can help data guys in other ways.    I just submitted over 100 curve contracts for decoding for example and wish they weren't almost all named 'Vyper_contract', the older contracts have much more descriptive names, why the switch? https://t.co/E3PV1kEpt4",
+        "children": [
+            1607796395104440320,
+            1607776027006337024,
+            1607828100905140226
+        ]
+    },
+    "1607796395104440320": {
+        "text": "[CurveFinance] : @hildobby_ @_bout3fiddy_ Fun. Checked - apparently there is currently absolutely no way to change this Etherscan's behavior: always Vyper_contract",
+        "children": []
+    },
+    "1607776509485518849": {
+        "text": "[_bout3fiddy_] : @CurveCap @hildobby_ @etherscan Yeah @etherscan still has ways to go before vyper contracts are properly displayed on their website.",
+        "children": []
+    },
+    "1607776027006337024": {
+        "text": "[CurveCap] : @hildobby_ @_bout3fiddy_ I believe this is due to how @Etherscan verifies Vyper contracts -- is there a good example of an older Curve contract with a descriptive name?  I can't find even older ones with descriptive names.",
+        "children": [
+            1607776509485518849
+        ]
+    },
+    "1607467948679254016": {
+        "text": "[BenFerrum] : @hildobby_ Use function calls brother ;)",
+        "children": [
+            1607763591314259976
+        ]
+    },
+    "1607696803281141760": {
+        "text": "[_bout3fiddy_] : @hildobby_ Imagine each event costing something like 2k-4k gas units. Since you want more detail, maybe 5k.    You're asking devs to make their smart contracts more expensive for users, just to provide you with free data.     You'd better not be too liberal with it.",
+        "children": [
+            1607762744975163392
+        ]
+    },
+    "1607748206708035586": {
+        "text": "[hildobby_] : @alex_kroeger @blur_io Events aren't necessary for simple interactions though, and more complex interactions are already costly, I assume that the % increase in gas cost for events there is in most case very small if not negligible",
+        "children": []
+    },
+    "1607748147622838272": {
+        "text": "[hildobby_] : @alex_kroeger @blur_io thanks for the breakdown, very informative! I assumed those were a bit cheaper than that so it seems like a bigger tradeoff than I originally assumed",
+        "children": [
+            1607748206708035586
+        ]
+    },
+    "1607466579230617600": {
+        "text": "[alex_kroeger] : @hildobby_ @blur_io I personally agreee--I think that useful events should be considered non-negotiable, as they help with tracking without using a crazy indexing solution.    And we should strive to bring gas costs down for end user applications such that logs are a no brainer.",
+        "children": [
+            1607748147622838272
+        ]
+    },
+    "1607452380848873472": {
+        "text": "[hildobby_] : Want data scientists to easily look into your smart contracts? Please emit events for all relevant interactions \ud83d\ude4f    A life changer for us",
+        "children": [
+            1607696803281141760,
+            1607617575281897472,
+            1607488511829217280,
+            1607508885719375872,
+            1607553967369641985,
+            1607471194562871297,
+            1607471069295968257,
+            1607470952698322944,
+            1607469996430733313,
+            1607467948679254016,
+            1607466558145679360,
+            1607455353603776513,
+            1607454835896614913,
+            1607452405570088962
+        ]
+    },
+    "1607617575281897472": {
+        "text": "[shubham12et1062] : @hildobby_ Can u  ELI5",
+        "children": []
+    },
+    "1607553967369641985": {
+        "text": "[adamxyzxyz] : @hildobby_ Never",
+        "children": []
+    },
+    "1607527014310739971": {
+        "text": "[antonio_smendes] : @hildobby_ @DuneAnalytics \u2665\ufe0f love to see it",
+        "children": []
+    },
+    "1607452405570088962": {
+        "text": "[hildobby_] : Also shoutout to @antonio_smendes for quickly decoding any contract I throw at him on @DuneAnalytics, with now over 1k of those \ud83e\udee1 https://t.co/Ch4Fm5lxK0",
+        "children": [
+            1607527014310739971
+        ]
+    },
+    "1607508885719375872": {
+        "text": "[alice_und_bob] : @hildobby_ Very much this!",
+        "children": []
+    },
+    "1607506864375476224": {
+        "text": "[runninyeti] : @hildobby_ @danrobinson Throwing out that we've got customizable indexers over at @indexingco    You can define what you want indexed and where you want it from (on-chain or not). Then all that can be \"transformed\" into whatever data model(s) is most useful    Fully tailorable for exactly these reasons",
+        "children": []
+    },
+    "1607486633804238848": {
+        "text": "[hildobby_] : @danrobinson Indexers are nice when done well but they are quite limiting, I very often need to dive into stuff no indexer handles and with too low interest for one to be built \ud83e\udd37    Imo you're also missing quite some context of how things work if you've never played with low level tx data",
+        "children": [
+            1607506864375476224,
+            1607487877620842497
+        ]
+    },
+    "1607488511829217280": {
+        "text": "[elindinga] : @hildobby_ What solutions are out there for inserting hypothetical events? What do you use right now?     I\u2019m super curious",
+        "children": []
+    },
+    "1607487877620842497": {
+        "text": "[tannishmango] : @hildobby_ @danrobinson what are some of those things they don't handle well?    we've built pretty solid indexers for internal use that are quite flexible so curious to hear what walls you've run into personally w other implementations",
+        "children": []
+    },
+    "1607469996430733313": {
+        "text": "[danrobinson] : @hildobby_ In a perfect world data scientists wouldn\u2019t use events, they would use powerful indexers    Events would just be for front-ends and other lightweight clients of the chain",
+        "children": [
+            1607486633804238848
+        ]
+    },
+    "1607471367833747456": {
+        "text": "[tannishmango] : @hildobby_ And don\u2019t do event logs like @CurveFinance they\u2019ve put me thru hell",
+        "children": []
+    },
+    "1607471194562871297": {
+        "text": "[tannishmango] : @hildobby_ And bls don\u2019t spoof the events lol",
+        "children": [
+            1607471367833747456
+        ]
+    },
+    "1607471069295968257": {
+        "text": "[BryanDieudonne] : @hildobby_ Ditto \ud83d\ude24",
+        "children": []
+    },
+    "1607470952698322944": {
+        "text": "[Lucianken] : @hildobby_ They don't want to. They specifically say if we don't add events 90% of data people  won't look.",
+        "children": []
+    },
+    "1607465900827111424": {
+        "text": "[alex_kroeger] : @hildobby_ @blur_io note I'm not sure these numbers are 100% accurate, e.g. not sure if topic0 is included in the base cost (I'm assuming it's not) and not sure if indexed data also incurs the 8 gas/byte fee",
+        "children": [
+            1607466579230617600
+        ]
+    },
+    "1607466558145679360": {
+        "text": "[rasmuky] : @hildobby_ Is there a public repository of event interpretations of call data? What\u2019s your go to?    This has kept me from moonlighting, big time commitment to study call data to make minimal progress.",
+        "children": []
+    },
+    "1607465526867144704": {
+        "text": "[alex_kroeger] : @hildobby_ @blur_io At $1,200/ETH and a 15 gwei gas price, that's $0.04 per transfer event.    Not huge on a per log basis, but that adds up.    It's also higher of course if the ETH price or gas prices go up. https://t.co/PX28MujIKq",
+        "children": [
+            1607465900827111424
+        ]
+    },
+    "1607464929669582848": {
+        "text": "[alex_kroeger] : @hildobby_ @blur_io Well let's consult the Ethereum yellow paper \ud83e\udd13    You pay 375 base cost + 375 gas per indexed topic + 8 gas per byte of log data    For an ERC20 transfer event that's 375 base + 3 indexed topics * 375 gas + 64 bytes of additional data = 2012 gas https://t.co/uM8l1VKLif",
+        "children": [
+            1607465526867144704
+        ]
+    },
+    "1607459746998792193": {
+        "text": "[hildobby_] : @alex_kroeger Also, the current most popular NFT aggregator on Ethereum (@blur_io) isn't the most gas efficient. NFT traders seem to favor UI/UX + speed over gas cost \ud83e\udd14    I'm curious about cost of having emitted events, are they really that costly?",
+        "children": [
+            1607464929669582848
+        ]
+    },
+    "1607459510528147457": {
+        "text": "[hildobby_] : @alex_kroeger DEX trades can do without events but for example NFT trades are getting tough with: aggregators, multiple royalty recipients, new order types often added...",
+        "children": [
+            1607459746998792193
+        ]
+    },
+    "1607455353603776513": {
+        "text": "[alex_kroeger] : @hildobby_ it\u2019s a struggle between gas cost and analytics",
+        "children": [
+            1607459510528147457
+        ]
+    },
+    "1607455455328239617": {
+        "text": "[banterlytics] : @MSilb7 @hildobby_ Just every month???   More like every hour",
+        "children": []
+    },
+    "1607454835896614913": {
+        "text": "[MSilb7] : @hildobby_ Need a cron job to auto-retweet this every month",
+        "children": [
+            1607455455328239617
+        ]
+    }
+}
