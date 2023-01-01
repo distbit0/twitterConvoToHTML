@@ -80,7 +80,6 @@ def json_to_md(json_data, topTweet):
         # print(sorted(tweet["children"]), tweet_id)
         # Recursively convert the children of the tweet to HTML
         for childId in tweet["children"]:
-            print(childId, "->", tweet_id)
             outStr += convert_to_md(childId, level + 1)
 
         return outStr
