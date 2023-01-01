@@ -1,0 +1,5 @@
+- add a link to each tweet
+- add support for quote tweets
+- add support for images
+- add support for collapsing tweets
+- 
