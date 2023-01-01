@@ -103,7 +103,6 @@ def markdown_to_html(markdown_list):
 
         # Get the number of leading spaces on the line
         leading_spaces = len(line) - len(line.lstrip())
-        print(leading_spaces)
         # Calculate the new indent level
         new_indent_level = leading_spaces // 4
 
@@ -128,17 +127,17 @@ def markdown_to_html(markdown_list):
 
 
 if __name__ == "__main__":
-    # tweet_id = get_first_arg()
-    # replies = get_replies(tweet_id)
-    # with open("output.json", "w") as outputMdFile:
-    #     outputMdFile.write(json.dumps(replies, indent=4))
+    tweet_id = get_first_arg()
+    replies = get_replies(tweet_id)
+    with open("output.json", "w") as outputMdFile:
+        outputMdFile.write(json.dumps(replies, indent=4))
 
-    # outputMd = json_to_md(replies, tweet_id)
+    outputMd = json_to_md(replies, tweet_id)
 
-    # with open("output.md", "w") as outputMdFile:
-    #     outputMdFile.write(outputMd)
+    with open("output.md", "w") as outputMdFile:
+        outputMdFile.write(outputMd)
 
-    outputMd = open("output.md").read()
+    # outputMd = open("output.md").read()
     html = markdown_to_html(outputMd)
 
     with open("output.html", "w") as outputHtmlFile:
