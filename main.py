@@ -57,7 +57,7 @@ def get_first_arg():
     # The first element of the list (sys.argv[0]) is the name of the script itself
     # The second element (sys.argv[1]) is the first argument, and so on
     if len(sys.argv) > 1:
-        return sys.argv[1].split("/")[-1]
+        return sys.argv[1].split("/")[-1].strip(".html")
     else:
         return None
 
@@ -76,12 +76,21 @@ def get_replies(tweet_id):
     # Iterate through the replies to the tweet using the scraper
     for reply in tweets:
         # Add the reply to the dictionary structure
-        text = "{" + reply.user.username + "}: " + reply.content
+        onlyTagsSoFar = True
+        contentWords = []
+        for word in reply.content.split(" "):
+            if "@" in word:
+                if onlyTagsSoFar:
+                    continue
+            else:
+                onlyTagsSoFar = False
+            contentWords.append(word)
+        text = " ".join(contentWords)
+        text = "{" + reply.user.username + "}: " + text
         if reply.quotedTweet != None:
             text += " {Quoted tweet}: " + reply.quotedTweet.content
         if reply.retweetedTweet != None:
             text += " {RT'd tweet}: " + reply.retweetedTweet.content
-        text = " ".join([word for word in text.split(" ") if "@" not in word]) + " "
         if reply.id in replies_dict:
             replies_dict[reply.id]["text"] = text
             replies_dict[reply.id]["link"] = reply.url
@@ -162,29 +171,22 @@ def jsonToHtml(json_data, topTweetId):
 
 
 if __name__ == "__main__":
+    config = json.loads(open("config.json").read())
     tweet_id = get_first_arg()
 
     replies = get_replies(tweet_id)
-    with open("output.json", "w") as outputMdFile:
-        outputMdFile.write(json.dumps(replies, indent=4))
 
     outputMd = json_to_md(replies, tweet_id)
-
     with open("output.md", "w") as outputMdFile:
         outputMdFile.write(outputMd)
 
-    # outputMd = open("output.md").read()
     html = jsonToHtml(replies, tweet_id)
-    config = json.loads(open("config.json").read())
-
     htmlPath = config["htmlFolderPath"] + tweet_id + ".html"
-
     if config["htmlFolderUrl"]:
         urlToOpen = config["htmlFolderUrl"] + tweet_id + ".html"
     else:
         urlToOpen = htmlPath
-
     with open(htmlPath, "w+") as outputHtmlFile:
         outputHtmlFile.write(html)
 
-    subprocess.run([config["browserCommand"], urlToOpen])
+    subprocess.run(["xdg-open", urlToOpen])
