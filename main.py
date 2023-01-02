@@ -7,6 +7,8 @@ from pathlib import Path
 
 headHtml = """
 <head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
   <style>
     html {
         background-color: black;
@@ -142,7 +144,7 @@ def jsonToHtml(json_data, topTweetId):
         tweet = json_data[int(tweet_id)]
         # Add the tweet text to the HTML string
         tweetText = convert_https_to_html(tweet["text"])
-        tweetText = addTweetHtmlLink(tweetText, tweet["link"])
+        tweetText = addTweetHtmlLink(tweetText, tweet["link"]).replace("\n", "<br>")
         outStr += "<p>" + tweetText + "</p>\n"
         # Recursively convert the children of the tweet to HTML
         for childId in tweet["children"]:
