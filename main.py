@@ -2,6 +2,8 @@ import snscrape.modules.twitter as sntwitter
 import subprocess
 import json
 import sys
+import re
+from pathlib import Path
 
 headHtml = """
 <head>
@@ -15,7 +17,6 @@ headHtml = """
         padding-left: 10px;
         margin-left: 10px;
         margin-bottom: 6px;
-        border: 1px solid white;
         border-radius: 5px;
       }
     p {
@@ -24,6 +25,29 @@ headHtml = """
     }
   </style>
 </head>"""
+
+
+def convert_https_to_html(string):
+    # First, find all of the https links in the string using a regular expression
+    pattern = r"https:\/\/\S+"
+    links = re.findall(pattern, string)
+    # Next, replace each link with an HTML `<a>` element
+    for link in links:
+        string = string.replace(link, f'<a href="{link}">{link}</a>')
+
+    return string
+
+
+def addTweetHtmlLink(tweet, link):
+    # First, find all of the https links in the string using a regular expression
+    pattern = r"\{.*?\}:"
+    username = re.findall(pattern, tweet)[0]
+    # Next, replace each link with an HTML `<a>` element
+    string = tweet.replace(
+        username, '<a style="color: white" href="' + link + '">' + username + "</a>"
+    )
+
+    return string
 
 
 def get_first_arg():
@@ -50,20 +74,17 @@ def get_replies(tweet_id):
     # Iterate through the replies to the tweet using the scraper
     for reply in tweets:
         # Add the reply to the dictionary structure
-        text = "[" + reply.user.username + "]: " + reply.content
+        text = "{" + reply.user.username + "}: " + reply.content
         if reply.quotedTweet != None:
-            text += "[Quoted tweet]: " + reply.quotedTweet.content
+            text += " {Quoted tweet}: " + reply.quotedTweet.content
         if reply.retweetedTweet != None:
-            text += "[Quoted tweet]: " + reply.retweetedTweet.content.replace(
-                "\n", "  "
-            )
-
-        text = text.replace("\n", "  ")
-        text = " ".join([word for word in text.split(" ") if "@" not in word])
+            text += " {RT'd tweet}: " + reply.retweetedTweet.content
+        text = " ".join([word for word in text.split(" ") if "@" not in word]) + " "
         if reply.id in replies_dict:
             replies_dict[reply.id]["text"] = text
+            replies_dict[reply.id]["link"] = reply.url
         else:
-            replies_dict[reply.id] = {"text": text, "children": []}
+            replies_dict[reply.id] = {"text": text, "children": [], "link": reply.url}
         # If the reply has a parent tweet, add it as a child to the parent tweet in the dictionary structure
         if reply.inReplyToTweetId:
             parent_id = reply.inReplyToTweetId
@@ -73,7 +94,11 @@ def get_replies(tweet_id):
                     set(replies_dict[parent_id]["children"])
                 )
             else:
-                replies_dict[parent_id] = {"text": "", "children": [reply.id]}
+                replies_dict[parent_id] = {
+                    "text": "",
+                    "children": [reply.id],
+                    "link": "",
+                }
 
     return replies_dict
 
@@ -87,7 +112,7 @@ def json_to_md(json_data, topTweet):
         indent = "    " * level + "- "
         tweet = json_data[int(tweet_id)]
         # Add the tweet text to the HTML string
-        outStr = indent + tweet["text"] + "\n"
+        outStr = indent + tweet["text"].replace("\n", "") + "\n"
         # print(sorted(tweet["children"]), tweet_id)
         # Recursively convert the children of the tweet to HTML
         for childId in tweet["children"]:
@@ -102,42 +127,40 @@ def json_to_md(json_data, topTweet):
     return outStr
 
 
-def markdown_to_html(markdown_list):
-    html_output = ""
-    # Initialize the indent level to 0
-    indent_level = 0
-    # Split the input string into lines
-    lines = markdown_list.split("\n")
-    for line in lines:
+def jsonToHtml(json_data, topTweetId):
+    # Initialize an empty HTML string
+    # Recursively convert each tweet and its children to HTML
+    def convert_to_html(tweet_id, level):
+        outStr = ""
+        # Indent the tweet based on its level in the hierarchy
 
-        # Get the number of leading spaces on the line
-        leading_spaces = len(line) - len(line.lstrip())
-        # Calculate the new indent level
-        new_indent_level = leading_spaces // 4
+        if level % 2 == 0:
+            outStr += '<div class="indent" style="background-color: black">\n'
+        else:
+            outStr += '<div class="indent" style="background-color: #303030">\n'
+        indent = "    " * level + "- "
+        tweet = json_data[int(tweet_id)]
+        # Add the tweet text to the HTML string
+        tweetText = convert_https_to_html(tweet["text"])
+        tweetText = addTweetHtmlLink(tweetText, tweet["link"])
+        outStr += "<p>" + tweetText + "</p>\n"
+        # Recursively convert the children of the tweet to HTML
+        for childId in tweet["children"]:
+            outStr += convert_to_html(childId, level + 1)
 
-        # If the new indent level is greater than the current indent level, add a new div
-        if new_indent_level > indent_level:
-            html_output += '<div class="indent">'
+        outStr += "</div>\n"
+        return outStr
 
-        # If the new indent level is less than the current indent level, close the current div
-        elif new_indent_level < indent_level:
-            html_output += "</div>" * abs((new_indent_level - indent_level))
+    # Convert the top-level tweets to HTML
 
-        # Update the current indent level
-        indent_level = new_indent_level
+    outStr = convert_to_html(topTweetId, 0)
+    outStr = "<html>\n" + headHtml + "\n<body>\n" + outStr + "\n</body>\n</html>"
 
-        # Add the line as a list item to the HTML
-        html_output += "<p>" + line.strip().replace("- ", "") + "</p>"
-
-    # Close any remaining open divs
-    html_output += "</div>" * indent_level
-    html_output = "<html>" + headHtml + "\n<body>\n" + html_output + "\n</body></html>"
-    return html_output
+    return outStr
 
 
 if __name__ == "__main__":
     tweet_id = get_first_arg()
-    print(tweet_id)
 
     replies = get_replies(tweet_id)
     with open("output.json", "w") as outputMdFile:
@@ -149,9 +172,17 @@ if __name__ == "__main__":
         outputMdFile.write(outputMd)
 
     # outputMd = open("output.md").read()
-    html = markdown_to_html(outputMd)
+    html = jsonToHtml(replies, tweet_id)
+    config = json.loads(open("config.json").read())
 
-    with open("output.html", "w") as outputHtmlFile:
+    htmlPath = config["htmlFolderPath"] + tweet_id + ".html"
+
+    if config["htmlFolderUrl"]:
+        urlToOpen = config["htmlFolderUrl"] + tweet_id + ".html"
+    else:
+        urlToOpen = htmlPath
+
+    with open(htmlPath, "w+") as outputHtmlFile:
         outputHtmlFile.write(html)
 
-    subprocess.run(["brave-browser", "./output.html"])
+    subprocess.run([config["browserCommand"], urlToOpen])
