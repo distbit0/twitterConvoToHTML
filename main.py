@@ -31,7 +31,7 @@ def get_first_arg():
     # The first element of the list (sys.argv[0]) is the name of the script itself
     # The second element (sys.argv[1]) is the first argument, and so on
     if len(sys.argv) > 1:
-        return sys.argv[1]
+        return sys.argv[1].split("/")[-1]
     else:
         return None
 
@@ -128,6 +128,8 @@ def markdown_to_html(markdown_list):
 
 if __name__ == "__main__":
     tweet_id = get_first_arg()
+    print(tweet_id)
+
     replies = get_replies(tweet_id)
     with open("output.json", "w") as outputMdFile:
         outputMdFile.write(json.dumps(replies, indent=4))

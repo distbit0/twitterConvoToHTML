@@ -2,4 +2,4 @@
 - add support for quote tweets
 - add support for images
 - add support for collapsing tweets
-- 
+- sort tweets by likes/retweets
