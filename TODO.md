@@ -1,7 +1,7 @@
-- [ ] add a link to each tweet
+- [x] add a link to each tweet
 - [x] add support for quote tweets
 - [ ] add support for images
 - [ ] add support for collapsing tweets
 - [ ] sort tweets by likes/retweets
-- [ ] only include a certain branch of the conversation
+- [x] only include a certain branch of the conversation
 - [ ] only include tweets from a list of accounts
