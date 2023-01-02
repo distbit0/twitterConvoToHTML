@@ -14,3 +14,4 @@ If the clipboard reading mechanism in `run.sh` doesn't work, feel free to call m
 The script produces the conversation formatted as both markdown (in `output.md`) and html (in `output.html`).
 `output.json` is only intended to be used internally.
 
+Todo: see TODO.md
