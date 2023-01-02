@@ -9,16 +9,16 @@ headHtml = """
     html {
         background-color: black;
         color: white;
+        font-family: Arial, sans-serif;
     }
       .indent {
-        padding-left: 20px;
-        margin-left: 20px;
+        padding-left: 10px;
+        margin-left: 10px;
         margin-bottom: 6px;
         border: 1px solid white;
         border-radius: 5px;
-
       }
-    li {
+    p {
       margin: 5px;
       padding: 5px;
     }
@@ -50,7 +50,16 @@ def get_replies(tweet_id):
     # Iterate through the replies to the tweet using the scraper
     for reply in tweets:
         # Add the reply to the dictionary structure
-        text = "[" + reply.user.username + "] : " + reply.content.replace("\n", "  ")
+        text = "[" + reply.user.username + "]: " + reply.content
+        if reply.quotedTweet != None:
+            text += "[Quoted tweet]: " + reply.quotedTweet.content
+        if reply.retweetedTweet != None:
+            text += "[Quoted tweet]: " + reply.retweetedTweet.content.replace(
+                "\n", "  "
+            )
+
+        text = text.replace("\n", "  ")
+        text = " ".join([word for word in text.split(" ") if "@" not in word])
         if reply.id in replies_dict:
             replies_dict[reply.id]["text"] = text
         else:
@@ -118,7 +127,7 @@ def markdown_to_html(markdown_list):
         indent_level = new_indent_level
 
         # Add the line as a list item to the HTML
-        html_output += "<li>" + line.strip() + "</li>"
+        html_output += "<p>" + line.strip().replace("- ", "") + "</p>"
 
     # Close any remaining open divs
     html_output += "</div>" * indent_level
