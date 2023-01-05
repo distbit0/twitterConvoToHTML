@@ -5,3 +5,6 @@
 - [ ] sort tweets by likes/retweets
 - [x] only include a certain branch of the conversation
 - [ ] only include tweets from a list of accounts
+- [ ] auto ignore certain accounts such as memdotai and threadreaderapp
+- [ ] add number to beginning of each tweet to indicate indent depth (for mobile viewers where indentation is not clear)
+- [ ] replace instances of username of original poster with "op" for easier tts reading
