@@ -4,6 +4,7 @@ import json
 import sys
 import re
 from pathlib import Path
+import pyperclip
 
 headHtml = """
 <head>
@@ -184,6 +185,7 @@ if __name__ == "__main__":
     htmlPath = config["htmlFolderPath"] + tweet_id + ".html"
     if config["htmlFolderUrl"]:
         urlToOpen = config["htmlFolderUrl"] + tweet_id + ".html"
+        pyperclip.copy(urlToOpen)
     else:
         urlToOpen = htmlPath
     with open(htmlPath, "w+") as outputHtmlFile:
