@@ -8,3 +8,4 @@
 - [ ] auto ignore certain accounts such as memdotai and threadreaderapp
 - [ ] add number to beginning of each tweet to indicate indent depth (for mobile viewers where indentation is not clear)
 - [ ] replace instances of username of original poster with "op" for easier tts reading
+- [ ] embed images from tweets in output html

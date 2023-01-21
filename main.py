@@ -67,7 +67,7 @@ def get_replies(tweet_id):
     replies_dict = {}
     # Set the conversation_id search parameter to the tweet ID
     scraper = sntwitter.TwitterSearchScraper(
-        "conversation_id:" + tweet_id + " (filter:safe OR -filter:safe)"
+        "conversation_id:" + tweet_id + " -filter:unsafe (filter:safe OR -filter:safe)"
     )
     mainTweet = sntwitter.TwitterTweetScraper(
         tweet_id, mode=sntwitter.TwitterTweetScraperMode.RECURSE
