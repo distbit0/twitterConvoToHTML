@@ -5,6 +5,7 @@ import sys
 import re
 from pathlib import Path
 import pyperclip
+import notify2
 
 headHtml = """
 <head>
@@ -170,11 +171,11 @@ def jsonToHtml(json_data, topTweetId):
 
     return outStr
 
-
-if __name__ == "__main__":
+def main(tweet_id):
     config = json.loads(open("config.json").read())
-    tweet_id = get_first_arg()
-
+    notify2.init('TwitterConvo')
+    n = notify2.Notification('convo id:', str(tweet_id))
+    n.show()
     replies = get_replies(tweet_id)
 
     outputMd = json_to_md(replies, tweet_id)
@@ -192,3 +193,15 @@ if __name__ == "__main__":
         outputHtmlFile.write(html)
 
     subprocess.run(["xdg-open", urlToOpen])
+
+if __name__ == "__main__":
+    notify2.init('TwitterConvo')
+    tweet_id = get_first_arg()
+
+    try:
+        main(tweet_id)
+    except:
+        n = notify2.Notification('failed: ', str(tweet_id))
+    else:
+        n = notify2.Notification('success: ', str(tweet_id))
+    n.show()
