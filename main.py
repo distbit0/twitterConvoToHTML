@@ -202,7 +202,7 @@ if __name__ == "__main__":
         main(tweet_id)
     except:
         n = notify2.Notification('failed: ', str(tweet_id))
-        subprocess.run(["xdg-open", "https://twitter.com/bob/status/" + tweet_id])
+        subprocess.run(["xdg-open", "https://twitter.com/bob/status/" + tweet_id + "##CONVOGENFAILED"])
     else:
         n = notify2.Notification('success: ', str(tweet_id))
     n.show()
