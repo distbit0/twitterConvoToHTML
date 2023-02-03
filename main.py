@@ -6,6 +6,8 @@ import re
 from pathlib import Path
 import pyperclip
 import notify2
+import socket 
+
 
 headHtml = """
 <head>
@@ -172,6 +174,7 @@ def jsonToHtml(json_data, topTweetId):
     return outStr
 
 def main(tweet_id):
+
     config = json.loads(open("config.json").read())
     notify2.init('TwitterConvo')
     n = notify2.Notification('convo id:', str(tweet_id))
@@ -185,7 +188,9 @@ def main(tweet_id):
     html = jsonToHtml(replies, tweet_id)
     htmlPath = config["htmlFolderPath"] + tweet_id + ".html"
     if config["htmlFolderUrl"]:
-        urlToOpen = config["htmlFolderUrl"] + tweet_id + ".html"
+        hostname=socket.gethostname()
+        localIP = socket.gethostbyname(hostname)
+        urlToOpen = config["htmlFolderUrl"].lower().replace("localhost", localIP) + tweet_id + ".html"
         pyperclip.copy(urlToOpen)
     else:
         urlToOpen = htmlPath
