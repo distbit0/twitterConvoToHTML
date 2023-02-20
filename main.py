@@ -7,12 +7,14 @@ from pathlib import Path
 import pyperclip
 import notify2
 import socket 
+import traceback
 
 
 headHtml = """
 <head>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
+  <title>{{title}}</title>
   <style>
     html {
         background-color: black;
@@ -142,7 +144,7 @@ def json_to_md(json_data, topTweet):
     return outStr
 
 
-def jsonToHtml(json_data, topTweetId):
+def jsonToHtml(json_data, topTweetId, headHtml):
     # Initialize an empty HTML string
     # Recursively convert each tweet and its children to HTML
     def convert_to_html(tweet_id, level):
@@ -166,15 +168,19 @@ def jsonToHtml(json_data, topTweetId):
         outStr += "</div>\n"
         return outStr
 
+    topTweetText = json_data[int(topTweetId)]["text"]
+    ##Remove all non-alphabetic characters from topTweetText
+    topTweetText = re.sub(r"[^a-zA-Z ]", "", topTweetText)
+    topTweetText = " ".join(topTweetText.split(" ")[1:]).lower()[:100]
     # Convert the top-level tweets to HTML
-
+    print(headHtml)
+    headHtml = headHtml.replace("{{title}}", topTweetText)
     outStr = convert_to_html(topTweetId, 0)
     outStr = "<html>\n" + headHtml + "\n<body>\n" + outStr + "\n</body>\n</html>"
 
     return outStr
 
 def main(tweet_id):
-
     config = json.loads(open("config.json").read())
     notify2.init('TwitterConvo')
     n = notify2.Notification('convo id:', str(tweet_id))
@@ -185,12 +191,12 @@ def main(tweet_id):
     with open("output.md", "w") as outputMdFile:
         outputMdFile.write(outputMd)
 
-    html = jsonToHtml(replies, tweet_id)
+    html = jsonToHtml(replies, tweet_id, headHtml)
     htmlPath = config["htmlFolderPath"] + tweet_id + ".html"
     if config["htmlFolderUrl"]:
         hostname=socket.gethostname()
         localIP = socket.gethostbyname(hostname)
-        urlToOpen = config["htmlFolderUrl"].lower().replace("localhost", localIP) + tweet_id + ".html"
+        urlToOpen = config["htmlFolderUrl"].replace("localhost", localIP) + tweet_id + ".html"
         pyperclip.copy(urlToOpen)
     else:
         urlToOpen = htmlPath
@@ -206,6 +212,7 @@ if __name__ == "__main__":
     try:
         main(tweet_id)
     except:
+        traceback.print_exc()
         n = notify2.Notification('failed: ', str(tweet_id))
         subprocess.run(["xdg-open", "https://twitter.com/bob/status/" + tweet_id + "##CONVOGENFAILED"])
     else:
